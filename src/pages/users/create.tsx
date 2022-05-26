@@ -1,4 +1,4 @@
-import { Flex, Box, Heading, Divider, VStack, SimpleGrid, Button, HStack } from "@chakra-ui/react";
+import { Flex, Box, Heading, Divider, VStack, SimpleGrid, Button, HStack, useBreakpointValue } from "@chakra-ui/react";
 import { Input } from "../../components/Form/Input";
 
 import { Header } from "../../components/Header";
