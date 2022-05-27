@@ -5,6 +5,7 @@ import { Sidebar } from "../../components/SideBar";
 
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { Pagination } from "../../components/Pagination";
+import Link from "next/link";
 
 export default function UsersList () {
   const isWideVersion = useBreakpointValue({
@@ -27,9 +28,11 @@ export default function UsersList () {
           >
             <Heading size="lg" fontWeight="normal">Usuários</Heading>
 
-            <Button as="a" size="sm" fontSize="sm" colorScheme="pink" leftIcon={<Icon as={RiAddLine} fontSize="20" />}>
-              Criar Novo
-            </Button>
+            <Link href="/users/create" passHref>
+              <Button as="a" size="sm" fontSize="sm" colorScheme="pink" leftIcon={<Icon as={RiAddLine} fontSize="20" />}>
+                Criar Novo
+              </Button>
+            </Link>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
