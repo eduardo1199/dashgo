@@ -1,6 +1,7 @@
 import { Flex, Box, Heading, Divider, VStack, SimpleGrid, Button, HStack } from "@chakra-ui/react";
 import Link from "next/link";
 import { Input } from "../../components/Form/Input";
+import { useMutation } from 'react-query';
 
 import { Header } from "../../components/Header";
 import { Sidebar } from "../../components/SideBar";
@@ -8,6 +9,9 @@ import { Sidebar } from "../../components/SideBar";
 import { SubmitHandler, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { api } from "../../services/api";
+import { queryClient } from "../../services/queryClient";
+import { useRouter } from "next/router";
 
 type CreateUserFormData = {
   name: string;
@@ -24,6 +28,22 @@ const CreateUserFormSchema = yup.object().shape({
 })
 
 export default function UserCreate () {
+  const router = useRouter();
+
+  const createUser = useMutation(async (user: CreateUserFormData) => {
+    const response = await api.post('users', {
+      user: {
+        ...user,
+        create_at: new Date(),
+      }
+    })
+
+    return response.data.user;
+  }, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('users');
+    }
+  });
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(CreateUserFormSchema)
   });
@@ -31,8 +51,9 @@ export default function UserCreate () {
   const handleSubmitCreateOrder: SubmitHandler<CreateUserFormData> = async (fields, event) => {
     event.preventDefault();
 
-    console.log(fields);
-    console.log(formState);
+    await createUser.mutateAsync(fields);
+
+    router.push('/users');
   }
 
   return (
